@@ -1,8 +1,8 @@
-name: Build
+name: Build New Website
 on:
   push:
     branches:
-      - drive-pipeline
+      - New-Website
 
 jobs:
   build:
@@ -28,18 +28,6 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-      - name: Cache Google Drive Assets
-        id: cache-drive-assets
-        uses: actions/cache@v2
-        with:
-          path: drive_assets
-          key: ${{ runner.os }}-drive-assets
-      - name: rclone - Download assets from Google Drive
-        uses: wei/rclone@v1
-        env:
-          RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
-        with:
-          args: copy -v gdrive:Covid_Website_Assets ./drive_assets
       - name: Node ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
@@ -59,4 +47,4 @@ jobs:
       - id: upload-files
         name: Upload files to Google Cloud Storage (rsync)
         timeout-minutes: 15
-        run: gsutil rsync -d -R -c ./dist/static gs://covid-website-storage2 && gsutil web set -m index.html gs://covid-website-storage2/
+        run: gsutil rsync -d -R -c ./dist/static gs://covid19parenting-new1 && gsutil web set -m index.html gs://covid19parenting-new1/
